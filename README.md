@@ -40,17 +40,34 @@ I have utilized the power of Java 17 to build this project.
 
 ## Project Structure:
 
-The project is organized into several packages, each serving a specific purpose:
 
-- `application`: This package houses two packages 
+The project is organized into several packages, each serving a specific purpose:
+It is inspired by Uncle Bob's view on [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+<p align="center">
+  <img src="./assets/CleanArchitecture.jpg" alt="clean architecture diagram" />
+</p>
+
+*The Dependency rule*
+
+It states that dependencies should always point inward toward the core of the application.
+
+The goal of the Dependency Rule is to maintain a clear separation of concerns and ensure that the core business logic remains decoupled from external concerns. This makes the application more testable, adaptable to changes, and easier to maintain over time.
+
+**My take on clean architecture package layering**
+
+- `domain`: Where our entities are defined, using JPA (Jakarta) annotations for ORM with our SQL database.
+  This is the inner layer that encapsulates Enterprise wide business rules.
+
+- `application`: This package houses two packages which contains application specific business rules
   - `services`: Where all application services (Interfaces and their implementations)
-  are defined
+    are defined
   - `usecases`: Where all application use cases are defined
 
-- `domain`: Where our entities are defined, using JPA (Jakarta) annotations for ORM with our SQL database. This is the inner layer
 
 - `infra`: This is the outer layer of our application. It hosts all external services
-  - `gateways`: 
+  - `gateways`: Manages and routes requests between different microservices as well as facilitating
+    communication between applications using different messaging protocols
     - `http`:
       - `clients`: Where all external http services resides
       - `controllers`: Where all APIs for the application are exposed
@@ -63,7 +80,7 @@ The project is organized into several packages, each serving a specific purpose:
 
 - `utils`: Where our global utility helper classes resides.
 
-- `HospitalServiceApplication.java`: This is the main class to run our project. It initializes our Spring application and connects all the components together.
+- `CleanServiceApplication.java`: This is the main class to run our project. It initializes our Spring application and connects all the components together.
 
 
 ## API Usage (Swagger UI Documentation)
