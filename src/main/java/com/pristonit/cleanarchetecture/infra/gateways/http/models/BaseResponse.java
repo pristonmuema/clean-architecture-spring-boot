@@ -12,7 +12,7 @@ public class BaseResponse<T> {
   @JsonProperty("message")
   public String message;
   @JsonProperty("errors")
-  public List<Error> errors;
+  public List<java.lang.Error> errors;
   @JsonProperty("status")
   public boolean status;
 
@@ -22,7 +22,7 @@ public class BaseResponse<T> {
     this.status = status;
   }
 
-  public BaseResponse(T data, String message, List<Error> errors, boolean status) {
+  public BaseResponse(T data, String message, List<java.lang.Error> errors, boolean status) {
     this.data = data;
     this.message = message;
     this.errors = errors;

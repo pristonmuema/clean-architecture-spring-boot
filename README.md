@@ -60,7 +60,7 @@ The goal of the Dependency Rule is to maintain a clear separation of concerns an
   This is the inner layer that encapsulates Enterprise wide business rules.
 
 - `application`: This package houses two packages which contains application specific business rules
-  - `services`: Where all application services (Interfaces and their implementations)
+  - `services`: Where all application services (Interfaces)
     are defined
   - `usecases`: Where all application use cases are defined
 

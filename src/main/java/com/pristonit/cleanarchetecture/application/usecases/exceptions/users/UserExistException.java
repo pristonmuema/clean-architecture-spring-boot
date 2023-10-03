@@ -1,10 +1,10 @@
 package com.pristonit.cleanarchetecture.application.usecases.exceptions.users;
 
-public class NoSuchUserFoundException extends RuntimeException {
+public class UserExistException extends RuntimeException {
 
 	private final String email;
 
-	public NoSuchUserFoundException(String email) {
+	public UserExistException(String email) {
 		this.email = email;
 	}
 
