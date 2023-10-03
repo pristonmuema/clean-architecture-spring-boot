@@ -5,6 +5,7 @@ import com.pristonit.cleanarchetecture.application.usecases.EPage;
 import com.pristonit.cleanarchetecture.application.usecases.FilterPageRequest;
 import com.pristonit.cleanarchetecture.application.usecases.exceptions.users.NoSuchUserFoundException;
 import com.pristonit.cleanarchetecture.application.usecases.users.dtos.UserRequestDto;
+import com.pristonit.cleanarchetecture.domain.users.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class QueryUserUseCases {
 		                       .orElseThrow(() -> new NoSuchUserFoundException(email));
 	}
 
-	public EPage<UserRequestDto> getUsers(int size, int page, String privileges) {
+	public EPage<UserRequestDto> getUsers(int size, int page, RoleType roleType) {
 		FilterPageRequest pageRequest = new FilterPageRequest(page, size);
-		return userQueryService.getAllUsers(pageRequest, privileges);
+		return userQueryService.getAllUsers(pageRequest, roleType);
 	}
 }

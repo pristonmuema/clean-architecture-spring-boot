@@ -3,8 +3,6 @@ package com.pristonit.cleanarchetecture.domain.users;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import static com.pristonit.cleanarchetecture.infra.gateways.http.security.Security.ENCODER;
+
 
 @Entity
 @Table(name = "Users")
@@ -37,9 +38,9 @@ public class User {
 	String password;
 	String primaryPhoneNumber;
 	String secondaryPhoneNumber;
-	@Enumerated(EnumType.STRING)
-	RoleType roleType;
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+	                                                CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(
 			name = "users_privileges",
 			joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
@@ -56,24 +57,29 @@ public class User {
 	}
 
 	public User(String firstName, String secondName, String email, String password,
-	            String primaryPhoneNumber, String secondaryPhoneNumber, RoleType roleType) {
+	            String primaryPhoneNumber, String secondaryPhoneNumber, List<Privilege> privileges) {
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.email = email;
-		this.password = password;
+		this.password = encodePassword(password);
 		this.primaryPhoneNumber = primaryPhoneNumber;
 		this.secondaryPhoneNumber = secondaryPhoneNumber;
-		this.roleType = roleType;
-		this.privileges = new ArrayList<>();
+		this.privileges = privileges;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
 
-//	void addPrivileges(List<String> privilegeList) {
-//		for (var privilege : privilegeList) {
-//			privileges.add(privilege);
-//		}
-//	}
+	private static String encodePassword(String password) {
+		return ENCODER.encode(password);
+	}
+
+	public void updatePassword(String newPassword) {
+		this.password = encodePassword(newPassword);
+	}
+
+	public Boolean validatePassword(String password) {
+		return ENCODER.matches(password, this.password);
+	}
 
 	public Long getId() {
 		return id;
@@ -129,14 +135,6 @@ public class User {
 
 	public void setSecondaryPhoneNumber(String secondaryPhoneNumber) {
 		this.secondaryPhoneNumber = secondaryPhoneNumber;
-	}
-
-	public RoleType getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(RoleType roleType) {
-		this.roleType = roleType;
 	}
 
 	public List<Privilege> getPrivileges() {

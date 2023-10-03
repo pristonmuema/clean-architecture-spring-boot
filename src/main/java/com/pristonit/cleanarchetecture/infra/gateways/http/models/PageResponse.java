@@ -17,7 +17,7 @@ public class PageResponse<T> extends BaseResponse<List<T>> {
 		this.pagination = pagination;
 	}
 
-	public PageResponse(List<T> data, String message, List<Error> errors,
+	public PageResponse(List<T> data, String message, List<java.lang.Error> errors,
 	                    PageInfo pagination) {
 		super(data, message, errors, false);
 		this.pagination = pagination;
